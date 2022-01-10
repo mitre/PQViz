@@ -1,0 +1,27 @@
+Order,Weight Category,Sample,Population,Crude Prevalence,Crude Prevalence Standard Error,Weighted Prevalence,Weighted Prevalence Standard Error,Age-Adjusted Prevalence,Age-Adjusted Prevalence Standard Error
+1,(1) Underweight (<5th percentile),"8,190","105,727",4.26,0.05,4.43,0.06,4.42,0.06
+1,(2) Healthy Weight (5th to <85th percentile),"118,556","1,477,610",61.71,0.11,61.92,0.15,61.94,0.15
+1,(3) Overweight (85th to <95th percentile),"29,835","365,789",15.53,0.08,15.33,0.11,15.33,0.11
+1,(4) Obesity (>95th percentile),"35,537","437,145",18.5,0.09,18.32,0.12,18.31,0.12
+1,(4b) Severe Obesity (>120% of the 95th percentile),"11,303","139,825",5.88,0.05,5.86,0.07,5.87,0.07
+2,Totals:,"192,118","2,386,270",,,,,,
+3,Query Version: IQVIA,,,,,,,,
+4,Query Parameters: AGE RACE SEX GEOGRAPHY YEAR,,,,,,,,
+5,"AGE: (02 - 04, 05 - 09, 10 - 14, 15 - 17, 18 - 19)",,,,,,,,
+6,"SEX: (Male, Female)",,,,,,,,
+7,"RACE: (White, Black, Asian, Other)",,,,,,,,
+8,RACE Suppressed: (None),,,,,,,,
+9,"RACE Imputed: 14.66% of race values were imputed. Please be advised, prevalence estimates may incur additional bias with imputed race values. Extreme caution is recommended when the proportion of imputed race values exceeds 40%.",,,,,,,,
+10,Geography: (37) North Carolina,,,,,,,,
+11,Year: 2017,,,,,,,,
+12,Weighting cells were collapsed for: (None),,,,,,,,
+13,AGE adjusted: (Yes),,,,,,,,
+14,Error Codes: (None),,,,,,,,
+15,Technical Documentation: See https://github.com/NORC-UChicago/CODI-PQ for more information and full details on data sources and methodologies.,,,,,,,,
+16,"Query Date: Thursday, September 23, 2021 2:10:32 PM",,,,,,,,
+17,"Suggested Citation: AEMR-US version 5 OMOP 5 [Aug 2019 Release] accessed through the E360TM Software-as-a-Service (SaaS) Platform. Accessed through prevalence query on Thursday, September 23, 2021 2:10:32 PM",,,,,,,,
+18,Caveats,,,,,,,,
+19,"Children with either missing or invalid age, sex, height, weight, or geography are not included in counts and prevalence estimates.",,,,,,,,
+20,The method used to calculate the standard errors are documented in the technical documentation.,,,,,,,,
+21,"The population estimates are based on age-race-sex-location specific counts from the 2014-2018 American Community Survey Five-year Estimates released by the Census Bureau on December 19, 2019.",,,,,,,,
+22,The method used to calculate age-adjusted prevalence is documented in the technical documentation.,,,,,,,,

@@ -1,0 +1,8 @@
+branca
+geopandas
+ipyleaflet
+ipywidgets
+matplotlib>=3.3.4
+pandas>=1.2.2
+seaborn>=0.11.1
+us>=2.0.2
