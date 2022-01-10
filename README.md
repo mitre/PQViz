@@ -18,7 +18,7 @@ by age, sex, race and geography. PQViz can support the simple output of both PQ
 - [Background](#background)
 - [Simple Install](#simple-install)
 - [Sample data and first run testing](#sample-data-and-first-run-testing)
-- [Docker Install](#docker-install)
+- [Support scripts for growthcleanr](#support-scripts-for-growthcleanr)
 
 ## Git Repository Information
 
@@ -127,6 +127,24 @@ outputs are the result of executing the functioning code blocks on the data. The
 "Out" blocks will often be interactive charts and graphs used to explore the
 CODI-PQ data. Descriptions of each `Out[#]:` block can be found in the text
 sections above the `In[#]:` blocks.
+
+### Support scripts for growthcleanr
+
+The directory `pq_support` contains R code that may assist in the workflow of
+cleaning data with
+[growthcleanr](https://github.com/carriedaymont/growthcleanr). These are not
+required to use PQViz, but are provided as an example of a workflow
+incorporating EHR data cleaning with the use of CODI-PQ.
+
+- `growthcleanr_batching.R` provides example code for processing large sets of
+  EHR data in growthcleanr using a batching strategy to improve performance
+  (speed)
+- `growthcleanr2pq.R` transforms growthcleanr output to prepare it for use with
+  CODI-PQ, including selecting and classifying BMI values
+- `bmi_selection.R` includes functions for selecting and classifying BMI values,
+  and is used by `growthcleanr2pq.R`
+
+See the `pq_support/README.md` file for additional details.
 
 ## Notice
 
