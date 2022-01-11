@@ -144,3 +144,4 @@ cython_debug/
 .tags*
 .history
 .Rproj.user
+reference_data/cdc-places-zcta-2020.csv
