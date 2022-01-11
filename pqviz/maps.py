@@ -123,19 +123,14 @@ def choropleth_map_places(selected_state="AL", selected_measure="TotalPopulation
     if selected_measure == "Total Population":
         value_min = state_places[measure_name].min()
         value_max = state_places[measure_name].max()
-        state_colors = cm.LinearColormap(
-            COLOR_SCALE,
-            vmin=value_min,
-            vmax=value_max,
-        ).to_step(10, method="quant")
     else:
         value_min = 0
         value_max = 100
-        state_colors = cm.LinearColormap(
-            COLOR_SCALE,
-            vmin=value_min,
-            vmax=value_max,
-        ).to_step(10, method="quant")
+    state_colors = cm.LinearColormap(
+        COLOR_SCALE,
+        vmin=value_min,
+        vmax=value_max,
+    ).to_step(10, method="quant")
 
     # TODO: Brute force assign meaningless value to ZCTAs not otherwise represented
     # in PLACES; evaluate for better options
@@ -216,11 +211,13 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
             if z5.startswith(z3):
                 valmap[z5] = df.loc[df["zcta3"] == z3]["Prevalence"].values[0]
 
+    value_min = 0
+    value_max = 100
     value_set = np.array([x for x in valmap.values()])
     colors = cm.LinearColormap(
         COLOR_SCALE,
-        vmin=0,  #  .value_set.min(),
-        vmax=100,  # .value_set.max(),
+        vmin=value_min,
+        vmax=value_max,
     ).to_step(10, method="quant")
 
     # Brute force removal of ZCTAs without a value in state-level geojson. not ideal.
@@ -257,7 +254,7 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
     for val in colors.index:
         legend_key = f"{round(val)}%"
         legend_colors[legend_key] = colors.rgb_hex_str(val)
-    legend = LegendControl(legend_colors, name="PQ Obesity", position="bottomright")
+    legend = LegendControl(legend_colors, name="PQ Prevalence", position="bottomright")
     m.add_control(legend)
     m.fit_bounds(STATE_BOUNDS[selected_state])
 
