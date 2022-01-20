@@ -28,7 +28,7 @@ representing one encounter.
 
 ## Preparing EHR data for CODI-PQ
 
-The process of preparing EHR data for use with CODI-PQ requires two steps:
+The process of preparing EHR data for use with CODI-PQ requires three steps:
 
 - Separate demographic data
 - Clean data with growthcleanr
@@ -75,12 +75,12 @@ The next step uses the output of growthcleanr to prepare data for CODI-PQ.
 
 Data that has been run though growthcleanr has the same format as growthcleanr
 input, with an added column containing the growthcleanr cleaning assessment.
-This data is ready to run the data through BMI selection and classification. The
-script `growthcleanr2pq.R` takes configuration values for your cleaned data file
-name, your demographic file name (assuming you separated these columns prior to
-cleaning), and the name of the CODI-PQ-ready output file you want to write
-classified BMI values to. Set these values under the section commented with
-`# CONFIGURATION`.
+This output data is ready to run through BMI calculation, selection, and
+classification. The script `growthcleanr2pq.R` takes configuration values for
+your cleaned data file name, your demographic file name (assuming you separated
+these columns prior to cleaning), and the name of the CODI-PQ-ready output file
+to save classified BMI values to. Set these values under the section commented
+with `# CONFIGURATION`. The script handles both pediatric and adult data.
 
 This script will create a csv that is in a format ready to be run through
 CODI-PQ.
