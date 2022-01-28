@@ -1,11 +1,12 @@
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 import glob
+from pathlib import Path
+
 from ipywidgets import interact, interactive, fixed, interact_manual
 import ipywidgets as widgets
-from pathlib import Path
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 
 
 def check_suppressed(df, attribute):
@@ -23,3 +24,23 @@ def check_suppressed(df, attribute):
             columns={"Prevalence": "Number of subpopulations with suppressed values"}
         )
         return suppressed_values
+
+
+def suppressed_zcta3(df, category, prevalence_type):
+    """
+    Return an array of suppressed ZCTA3 values for the specified category and
+    prevalence type suppressed zcta3s.
+
+    Parameters:
+    df: DataFrame of prevalence data
+    category: Weight category/class
+    prevalence_type: Prevalence type, one of ['Age-Adjusted', 'Crude', 'Weighted']
+
+    Returns:
+    A numpy array of ZCTA3s with suppressed prevalence values.
+    """
+    return df.loc[
+        (df["Weight Category"] == category)
+        & (df["Prevalence type"] == prevalence_type)
+        & (df["Prevalence"].isna())
+    ]["zcta3"].values.tolist()

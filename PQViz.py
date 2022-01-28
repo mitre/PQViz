@@ -145,8 +145,9 @@ To show/hide this cell's raw code input, click <a href="javascript:code_toggle()
 display(tag)
 
 style = dict(description_width="150px")
-demographic_type = "sex"
+demographic_type = "zcta3"
 demo_drop_down = widgets.Dropdown(options=["sex", "race", "age", "zcta3"],
+                                  value=demographic_type,
                                   description="Demographic Type:",
                                   disabled=False,
                                   style=style)
@@ -160,7 +161,8 @@ demo_drop_down.observe(dropdown_handler_demo, names="value")
 
 selected_state = "NC"
 state_options = sorted([(s.name, s.abbr) for s in us.STATES])
-state_drop_down = widgets.Dropdown(options= state_options,
+state_drop_down = widgets.Dropdown(options=state_options,
+                                   value=selected_state,
                                    description="State:",
                                    disabled=False,
                                    style=style)
@@ -327,12 +329,12 @@ interact(maps.choropleth_map_places, selected_state=fixed(selected_state), selec
 # 
 # Note that the map below will show values grouped at the ZCTA3 level, rather than the finer-grained ZCTA5 level shown in the CDC PLACES data in the map directly above.
 # 
-# Areas of the map that are not filled in represent ZCTA3 areas with suppressed data.
+# Areas of the map filled with light grey represent ZCTA3 areas without values present in the data. Areas filled with  dark grey represent ZCTA3 areas with suppressed data.
 
 # In[ ]:
 
 
-category_options = sorted(prev_data.loc[prev_data['Prevalence'].notna()]['Weight Category'].unique())
+category_options = sorted(prev_data['Weight Category'].unique())
 category_dropdown = widgets.Dropdown(options=category_options,
                                      description="Weight Category:",
                                      disabled=False,

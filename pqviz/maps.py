@@ -10,6 +10,7 @@ from ipyleaflet import (
     Choropleth,
     GeoJSON,
     Icon,
+    LayerGroup,
     LayersControl,
     LegendControl,
     Map,
@@ -22,6 +23,8 @@ import ipywidgets as widgets
 import numpy as np
 import pandas as pd
 import us
+
+from .check_suppressed import suppressed_zcta3
 
 
 # ZCTA-ZIP Code mapping for filtering by state
@@ -162,7 +165,7 @@ def choropleth_map_places(selected_state="AL", selected_measure="TotalPopulation
             value = f"{state_valmap[id]}%"
         label.value = f"ZCTA {properties['ZCTA5CE10']}: {value} ({measure_desc})"
 
-    geo_data = Choropleth(
+    choro_layer = Choropleth(
         geo_data=state_gj,
         choro_data=state_valmap,
         colormap=state_colors,
@@ -174,8 +177,8 @@ def choropleth_map_places(selected_state="AL", selected_measure="TotalPopulation
         name=measure_display,
         layout=Layout(width="100%", height="600px"),
     )
-    geo_data.on_click(click_handler)
-    m.add_layer(geo_data)
+    choro_layer.on_click(click_handler)
+    m.add_layer(choro_layer)
 
     legend_colors = {}
     for i, val in enumerate(state_colors.index[1:]):
@@ -195,6 +198,14 @@ def choropleth_map_places(selected_state="AL", selected_measure="TotalPopulation
 
 
 def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type=""):
+    """
+    Produce a map with three layers: a base map of all ZCTA5s, an intermediate map of
+    ZCTA5s belonging to a ZCTA3 with suppressed values, and a top-level choropleth of
+    ZCTA5s with non-suppressed prevalence values.
+
+    TODO: is there any difference between the base map and the suppressed ZCTA layer?
+    """
+
     # US state metadata
     us_state = us.states.lookup(selected_state)
 
@@ -211,9 +222,12 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
         properties = feature["properties"]
         feature.update(id=properties["ZCTA5CE10"])
 
+    # ZCTA3s for this dataset with suppressed prevalence valus
+    suppressed_zcta3s = suppressed_zcta3(df, category, prevalence_type)
+
     # Limit to selected category and type
     df = df.copy()
-    # Eliminate suppressed values
+    # Just the non-suppressed values
     df = df.loc[df["Prevalence"].notna()]
     df = df.loc[df["Weight Category"] == category]
     df = df.loc[df["Prevalence type"] == prevalence_type]
@@ -235,22 +249,59 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
         vmax=value_max,
     )
 
-    # Brute force removal of ZCTAs without a value in state-level geojson. not ideal.
+    m = Map()
+    label = Label(layout=Layout(width="100%"))
+
+    # First, add the base map of all zctas
+    def base_click_handler(event=None, feature=None, id=None, properties=None):
+        value = f"ZCTA {properties['ZCTA5CE10']}: no value ({prevalence_type} prevalence, {category})"
+        label.value = value
+
+    base_layer = GeoJSON(
+        data=state_gj,
+        style={"opacity": 0.8, "color": "black", "weight": 0.5, "fillOpacity": 0.1},
+        hover_style={"fillColor": "blue", "fillOpacity": 0.5},
+    )
+    base_layer.on_click(base_click_handler)
+
+    # Identify ZCTAs without a value in state-level geojson
+    missing_zcta5s = []
     feature_ids = set([f["id"] for f in state_gj["features"]])
     valmap_ids = set(valmap.keys())
     for fid in feature_ids.difference(valmap_ids):
         valmap[fid] = 0
+        missing_zcta5s.append(fid)
+
+    # Next, add the suppressed ZCTA5 layer
+    def suppressed_click_handler(event=None, feature=None, id=None, properties=None):
+        value = f"ZCTA {properties['ZCTA5CE10']}: suppressed ({prevalence_type} prevalence, {category})"
+        label.value = value
+
+    suppressed_gj = state_gj.copy()
+    suppressed_features = [
+        f for f in suppressed_gj["features"] if f["id"][:3] in suppressed_zcta3s
+    ]
+    suppressed_gj["features"] = suppressed_features
+    suppressed_layer = GeoJSON(
+        data=suppressed_gj,
+        style={
+            "opacity": 1.0,
+            "color": "black",
+            "weight": 0.8,
+            "fillOpacity": 0.2,
+        },
+        hover_style={"fillColor": "green", "fillOpacity": 0.5},
+    )
+    suppressed_layer.on_click(suppressed_click_handler)
+
     reduced_features = [f for f in state_gj["features"] if valmap[f["id"]] != 0]
     state_gj["features"] = reduced_features
 
-    m = Map()
-    label = Label(layout=Layout(width="100%"))
-
-    def click_handler(event=None, feature=None, id=None, properties=None):
+    def value_click_handler(event=None, feature=None, id=None, properties=None):
         value = f"ZCTA3 {properties['ZCTA5CE10'][:3]}: {valmap[id]} ({prevalence_type} prevalence, {category})"
         label.value = value
 
-    geo_data = Choropleth(
+    choro_layer = Choropleth(
         geo_data=state_gj,
         choro_data=valmap,
         colormap=colors,
@@ -262,8 +313,11 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
         name=category,
         layout=Layout(width="100%", height="600px"),
     )
-    geo_data.on_click(click_handler)
-    m.add_layer(geo_data)
+    choro_layer.on_click(value_click_handler)
+
+    # Add all three layers together to be explicit
+    layer_group = LayerGroup(layers=(base_layer, suppressed_layer, choro_layer))
+    m.add_layer(layer_group)
 
     legend_colors = {}
     for i, val in enumerate(colors.index[1:]):
