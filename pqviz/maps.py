@@ -59,9 +59,22 @@ PLACES_MEASURES = [
     ("Obesity", "OBESITY_CrudePrev", "Obesity, crude prevalence among adults"),
 ]
 
-# Color brewer colorblind safe diverging 6-class colors via
-# https://colorbrewer2.org/?type=diverging&scheme=PRGn&n=6
-COLOR_SCALE = ["#762a83", "#af8dc3", "#e7d4e8", "#d9f0d3", "#7fbf7b", "#1b7837"]
+# Color scheme taken from NYT COVID hotspot map
+# https://www.nytimes.com/interactive/2021/us/covid-cases.html
+COLOR_SCALE = [
+    "#F2DF91",
+    "#F9C467",
+    "#FFA83E",
+    "#FF8B24",
+    "#FD6A0B",
+    "#F04F09",
+    "#D8382E",
+    "#C62833",
+    "#AF1C43",
+    # "#8A1739",  # buffer visual separation between highest values for clarity
+    # "#701547",
+    "#4C0D3E",
+]
 
 # Shorthand set of state-level bounding boxes for zooming to extent w/fit_bounds()
 STATE_BOUNDS = json.load(open("reference_data/state_boundaries/state_bounds.json"))
@@ -126,11 +139,11 @@ def choropleth_map_places(selected_state="AL", selected_measure="TotalPopulation
     else:
         value_min = 0
         value_max = 100
-    state_colors = cm.LinearColormap(
-        COLOR_SCALE,
+    state_colors = cm.StepColormap(
+        colors=COLOR_SCALE,
         vmin=value_min,
         vmax=value_max,
-    ).to_step(10, method="quant")
+    )
 
     # TODO: Brute force assign meaningless value to ZCTAs not otherwise represented
     # in PLACES; evaluate for better options
@@ -165,9 +178,11 @@ def choropleth_map_places(selected_state="AL", selected_measure="TotalPopulation
     m.add_layer(geo_data)
 
     legend_colors = {}
-    for val in state_colors.index:
+    for i, val in enumerate(state_colors.index[1:]):
+        val_lower = round(state_colors.index[i])
+        val_upper = round(val)
         legend_key = (
-            f"{round(val)}%"
+            f"{val_lower} - {val_upper}%"
             if selected_measure != "Total Population"
             else f"{int(val):,d}"
         )
@@ -214,11 +229,11 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
     value_min = 0
     value_max = 100
     value_set = np.array([x for x in valmap.values()])
-    colors = cm.LinearColormap(
-        COLOR_SCALE,
+    colors = cm.StepColormap(
+        colors=COLOR_SCALE,
         vmin=value_min,
         vmax=value_max,
-    ).to_step(10, method="quant")
+    )
 
     # Brute force removal of ZCTAs without a value in state-level geojson. not ideal.
     feature_ids = set([f["id"] for f in state_gj["features"]])
@@ -251,8 +266,10 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
     m.add_layer(geo_data)
 
     legend_colors = {}
-    for val in colors.index:
-        legend_key = f"{round(val)}%"
+    for i, val in enumerate(colors.index[1:]):
+        val_lower = round(colors.index[i])
+        val_upper = round(val)
+        legend_key = f"{val_lower} - {val_upper}%"
         legend_colors[legend_key] = colors.rgb_hex_str(val)
     legend = LegendControl(legend_colors, name="PQ Prevalence", position="bottomright")
     m.add_control(legend)
