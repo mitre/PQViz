@@ -259,7 +259,7 @@ def choropleth_map_pq(selected_state="NC", df=None, category="", prevalence_type
 
     base_layer = GeoJSON(
         data=state_gj,
-        style={"opacity": 0.8, "color": "black", "weight": 0.5, "fillOpacity": 0.1},
+        style={"opacity": 0.8, "color": "black", "weight": 0.8, "fillOpacity": 0.1},
         hover_style={"fillColor": "blue", "fillOpacity": 0.5},
     )
     base_layer.on_click(base_click_handler)
