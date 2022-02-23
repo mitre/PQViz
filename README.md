@@ -37,7 +37,7 @@ This tool allows users to conduct post-processing and data visualization of
 for weight-status-category prevalence based on BMI, which can be stratified by
 age, sex, race and geography. PQViz can support the simple output of both PQ
 (Youth and Teens) and APQ (Adults). This notebook supports outputs from CODI-PQ
-run individually with no coniditons.
+run individually with no conditions.
 
 ### Background
 
@@ -73,7 +73,7 @@ software languages and packages:
   [ipyleaflet](https://ipyleaflet.readthedocs.io/en/latest/) with map data
   processing support from [GeoPandas](https://geopandas.org/en/stable/).
 
-## Simple Install
+## Installation
 
 If you are new to Jupyter and Python and use Windows, please use the
 instructions below for installing with Anaconda on Windows. If you are familiar
@@ -83,8 +83,8 @@ instructions for Python and pip on Linux / MacOS.
 ### Anaconda on Windows
 
 Anaconda is an all-in-one package installer for setting up dependencies needed
-to run and view PQViz. This is recommended approach for Windows due to a number
-of dependencies that need to be installed in the correct order.
+to run and view PQViz. This is the recommended approach for Windows due to a
+number of dependencies that need to be installed in the correct order.
 
 1. Install Anaconda
 
@@ -125,10 +125,9 @@ conda install -c conda-forge ipyleaflet
    unzipped in Step 2 (likely found in your `Downloads` folder). Click on
    `PQViz.ipynb` to run the Python notebook.
 
-7. **[Optional step for testing the notebook]** Once the notebook is open, click
-   the 'Run' button to step through the various blocks (cells) of the document,
-   OR click the 'Cell' dropdown in the menu bar and select 'Run all' to test the
-   entire notebook all at once.
+7. Once the notebook is open, click the 'Run' menu option to step through the
+   various blocks (cells) of the document, OR click the 'Cell' dropdown in the
+   menu bar and select 'Run all' to test the entire notebook all at once.
 
 ### Python and pip on Linux / MacOS
 
@@ -157,13 +156,13 @@ manually.
 
 ## Sample data and first run testing
 
-By default when you reach Step 6 of the [Simple Install](#simple-install)
-instructions above the notebook will use sample data loaded from the `.csv`
+By default when you reach Step 6 of the [Installation](#installation)
+instructions above, the notebook will use sample data loaded from the `.csv`
 files located in the PQViz project directory `sample_data`. The sample data is
 the CODI-PQ output of example synthetic dataset created using
-[Synthea](https://synthetichealth.github.io/synthea/). The data is North
-Carolina pediatric data, and was processed with CODI-PQ for all sexes, for each
-sex individually, and for individual ZIP Code Tabulation Areas (ZCTAs).
+[Synthea](https://synthetichealth.github.io/synthea/). This simulated data is
+North Carolina pediatric data, and was processed with CODI-PQ for all sexes, for
+each sex individually, and for individual ZIP Code Tabulation Areas (ZCTAs).
 
 ### Output boxes
 
