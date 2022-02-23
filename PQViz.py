@@ -49,13 +49,13 @@ import us
 # In[ ]:
 
 
-get_ipython().run_line_magic('load_ext', 'autoreload')
+get_ipython().magic('load_ext autoreload')
 
 
 # In[ ]:
 
 
-get_ipython().run_line_magic('autoreload', '2')
+get_ipython().magic('autoreload 2')
 
 
 # This code cell instructs the notebook to automatically display plots inline.
@@ -63,7 +63,7 @@ get_ipython().run_line_magic('autoreload', '2')
 # In[ ]:
 
 
-get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().magic('matplotlib inline')
 
 
 # This code cell tells the notebook to output plots for high DPI displays, such as 4K monitors, many smartphones or a retina display on Apple hardware. This cell does not need to be run and can be safely removed. If removed, charts will look more "blocky" or "pixelated" on high DPI displays.
@@ -71,7 +71,7 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 # In[ ]:
 
 
-get_ipython().run_line_magic('config', "InlineBackend.figure_format = 'retina'")
+get_ipython().magic("config InlineBackend.figure_format = 'retina'")
 
 
 # The following cell configures the look and feel of PQViz charts and data views for clarity. It also sets the visual palette to use a set of color-blind hues, and includes the District of Columbia in the list of state boundaries for map rendering.
