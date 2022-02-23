@@ -70,7 +70,8 @@ software languages and packages:
   with these utilities.
 
 - Maps are provided by
-  [ipyleaflet](https://ipyleaflet.readthedocs.io/en/latest/)
+  [ipyleaflet](https://ipyleaflet.readthedocs.io/en/latest/) with map data
+  processing support from [GeoPandas](https://geopandas.org/en/stable/).
 
 ## Simple Install
 
